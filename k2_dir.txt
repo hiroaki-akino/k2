@@ -1,0 +1,43 @@
+k2
+├── css
+│   └── default.css
+├── file
+│   ├── daily_sales.csv
+│   └── test.txt
+├── img
+│   ├── background
+│   │   ├── cherry.png
+│   │   ├── heart_tree.png
+│   │   └── tuchikabe.png
+│   ├── default.jpg
+│   └── fav_flog.png
+├── inc
+│   ├── config.php
+│   ├── db_access.php
+│   ├── functions.php
+│   ├── var_dump.php
+│   └── variables.php
+├── src
+│   ├── buy.conform.php
+│   ├── buyer_mypage.php
+│   ├── cron.php
+│   ├── cron_test.php
+│   ├── evaluate_form.php
+│   ├── index.php
+│   ├── index_add.php
+│   ├── index_ajax.php
+│   ├── item.php
+│   ├── item_reset.php
+│   ├── login.php
+│   ├── mail.php
+│   ├── mail_sent.php
+│   ├── reg-confirm.php
+│   ├── register.check.php
+│   ├── register.php
+│   ├── robots.txt
+│   ├── seller.php
+│   ├── seller_mypage.php
+│   ├── sitemap.xml
+│   └── sum_add.php
+├── db_access.php
+└── k2_config.php

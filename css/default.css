@@ -1,0 +1,210 @@
+/* 作成：秋野 */
+
+/* ---------- 全ファイル共有のスタイルシート ---------- */
+:root{
+	--color-navy			: #2c2c3f;
+	--color-light-navy		: #4a4a6b;
+	--color-orange			: #ff9f51;
+	--color-light-orange	: #fdba83;
+	--color-light-gray		: rgb(190, 190, 190);
+	--font-xlarge			: 80px;
+    --font-large			: 32px;
+    --font-medium			: 24px;
+    --font-small			: 16px;
+    --basic-padding			: 80px;
+    --basic-align			: left;
+	--basic-flex-direction	: row;
+	--responce-large-width	: 500px;
+	--responce-large-height	: 320px;
+	--responce-small-width	: 200px;
+	--responce-small-height	: 128px;
+	--responce-em-height	: 33em;
+	--responce-margin		: 0;
+	--responce-btn-height	: 42px;
+}
+@media screen and (max-width: 767px){
+    :root{
+        --font-xlarge			: 60px;
+        --basic-padding			: 50px;
+        --basic-align			: center;
+		--basic-flex-direction	: row;
+		--responce-large-width	: 400px;
+		--responce-large-height	: 256px;
+		--responce-em-height	: 35em;
+		--responce-btn-height	: 40px;
+    }
+}
+@media screen and (max-width: 479px){
+    :root{
+    --font-xlarge				: 40px;
+    --font-large				: 24px;
+    --font-medium				: 16px;
+    --font-small				: 12px;
+    --basic-padding				: 20px;
+    --basic-align				: center;
+	--basic-flex-direction		: column;
+	--responce-large-width		: 280px;
+	--responce-large-height		: 180px;
+	--responce-em-height		: 35em;
+	--responce-margin			: auto;
+	--responce-btn-height		: 36px;
+    }
+}
+body{
+	background-color : white;
+	font-size		 : var(--font-small);
+	font-family		 : 'Arial','游ゴシック','メイリオ','ヒラギノ角ゴ ProN W3';
+}
+body > header{
+	margin			 : 0 0 50px 0;
+	padding       	 : 1px 20px;
+	background-color : var(--color-navy);
+	color			 : white;
+	max-width			 : 90%;
+	padding			 : var(--basic-padding);
+}
+body > header > h1{
+	text-align	 : left;
+	color		 : var(--color-orange);
+	font-family	 : 'Arial','Yu Gothic UI','メイリオ';
+}
+body > header > p{
+	text-align : right;
+}
+body > header > div	{
+	text-align : right;
+}
+/* body > header::after{
+	content		  : "";
+	margin-bottom : 20px;
+	display       : block;
+	clear         : both;
+} */
+body > footer{
+	margin-top       : 100px;
+	padding          : 10px 20px;
+	background-color : var(--color-navy);
+	color            : white;
+	text-align       : center;
+}
+main{
+	width  : 90%;
+	margin : auto;
+}
+section{
+	margin-bottom	: 20px;
+}
+h2{
+	text-align :left;
+}
+h2::after {
+	content    : "";
+	display    : block;
+	height     : 4px;
+	/* width      : 350px; */
+	background : -webkit-linear-gradient(to right, var(--color-light-gray), transparent);
+	background : linear-gradient(to right, var(--color-light-gray), transparent);
+}
+a,
+a:visited{
+	color 	: var(--color-orange);
+}
+a:hover{
+	color 				: var(--color-light-orange);
+	text-decoration 	: underline; 
+}
+table{
+	width : 100%;
+}
+span{
+	font-size : 12px;
+}
+.err{
+	font-size : 18px;
+	color     : red;
+}
+.like_a{
+	color 	: blue;
+	cursor	: pointer;
+}
+.like_a:hover{
+	text-decoration : underline;
+}
+/* 主にform.phpで使う? */
+.form_err{
+	border : solid 3px red;
+}
+.row{
+	display			: flex;
+	flex-direction	: row;
+	justify-content	: flex-start;
+}
+.res_row{
+	display			: flex;
+	flex-direction	: var(--basic-flex-direction);
+}
+.mult_rows{
+	display			: flex;
+	flex-wrap		: wrap;
+	align-items		: start;
+	justify-content	: space-between;
+}
+.border{
+	border	: solid 1px var(--color-light-gray);
+}
+.overflow{
+	overflow-y	: scroll;
+}
+.fix{
+	width	: 100%;
+	height	: 100%;
+}
+.bottom{
+	position	: relative;
+	bottom		: 0;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="date"],
+input[type="email"],
+input[type="number"]{
+	height		: 1.8em;
+	font-size	: calc(var(--font-small) - 2px);
+}
+input[type="text"]:hover,
+input[type="password"]:hover,
+input[type="date"]:hover,
+input[type="email"]:hover,
+input[type="number"]:hover,
+textarea:hover{
+	background-color : var(--color-light-orange);
+}
+input[type="submit"],
+input[type="button"],
+button{
+	height			 : var(--responce-btn-height);
+	/* width			 : 50%; */
+	border-radius	 : 5px;
+	/* box-shadow		 : 4px 4px 6px gray; */
+	background-color : var(--color-orange);
+	color			 : var(--color-navy);
+	font-size		 : calc(var(--font-small) - 1px);
+	/* transition		 : all 0.8s ease; */
+	cursor	: pointer;
+}
+input[type="submit"]:hover,
+input[type="button"]:hover{
+	font-style			 : normal;
+	font-weight			 : bold;
+	text-decoration-line : none;
+	/* transition			 : all 0.3s ease; */
+}
+.disabled{
+	pointer-events : none;
+}
+select{
+	font-size	: calc(var(--font-small) - 1px);
+	border		: solid 1px var(--color-light-gray);
+	height		: 1.5em;
+}

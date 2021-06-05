@@ -1,0 +1,4 @@
+User-Agent: *
+Disallow:
+Allow: *
+Sitemap: http://websystem.rulez.jp/19/web19g1/src/sitemap.xml

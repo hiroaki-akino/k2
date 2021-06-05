@@ -1,0 +1,390 @@
+●SQL文の統一事項
+命令文　　：大文字
+テーブル名：小文字
+カラム名　：小文字
+
+●ログイン
+mysql -u root
+
+●DBの検索エンジン作成
+use information_schema;
+select table_name,engine from tables;
+
+
+●ーーーーーーー　テーブル関連のコマンド　ーーーーーーー●
+
+●テーブルの情報取得
+SELECT
+	table_name,
+	column_name,
+	ordinal_position,
+	column_default,
+	is_nullable,
+	data_type,
+	character_maximum_length
+FROM
+	information_schema.columns
+WHERE
+	table_schema = 'web1902(DBの名前)';
+
+●テーブルのカラム名のみ取得
+SELECT column_name FROM information_schema.columns
+WHERE table_schema = 'web1902' AND table_name = 'k1_user';
+
+
+●ーーーーーーー　ユーザ関連のコマンド　ーーーーーーー●
+
+参考URL　https://qiita.com/PallCreaker/items/0b02c5f42be5d1a14adb
+
+●ユーザ確認系　
+SELECT Host, User FROM mysql.user;
+SELECT Host, User, authentication_string FROM mysql.user;
+SHOW GRANTS FOR root@localhost;
+SHOW GRANTS FOR current_user();
+
+●ユーザ作成（開発環境）
+// リナックス→ウィンドウズ用のユーザ作成（逆もいる）
+GRANT ALL ON *.* TO 'root'@'192.168.1.102' IDENTIFIED BY 'root';
+GRANT ALL ON web1902.* TO 'web1902'@'localhost' IDENTIFIED BY 'web';
+
+GRANT ALL ON *.* TO 'root'@'219.106.37.195' IDENTIFIED BY 'root';
+219.106.37.195
+
+●ユーザ作成（サービス用いらんかも）
+GRANT ALL ON web1902.* TO 'web1902_k1_admin'@'%' IDENTIFIED BY 'admin';
+GRANT SELECT,INSERT,UPDATE ON web1902.* TO 'web1902_k1_user'@'%'  IDENTIFIED BY 'user';
+GRANT SELECT,INSERT        ON web1902.* TO 'web1902_k1_guest'@'%' IDENTIFIED BY 'gst';
+
+●テーブル定義確認
+desc ******** ;
+
+●削除 or 最初から検証する用
+
+DROP TABLE ********** ;
+DROP DATABASE ******** ;
+
+DROP DATABASE k2g1;
+
+// 学校の開発環境でのDB
+DROP DATABASE k2_kadai;
+
+
+●ーーーーーーー　以降作業用のコマンド　ーーーーーーー●
+
+/* --- 学校の開発環境でのDB --- */
+DROP DATABASE k2_kadai;
+CREATE DATABASE k2_kadai;
+USE k2_kadai;
+
+/* --- 秋野個人 --- */
+DROP DATABASE k2g1;
+CREATE DATABASE k2g1;
+USE k2g1;
+
+
+/* ---------- 本番環境ではDBの削除は絶対禁止！！　やるなら以下のコマンドのみ ---------------------------------------- */
+
+
+
+CREATE TABLE k2g1_seller(
+seller_id              VARCHAR(12)  NOT NULL PRIMARY KEY,
+seller_pw              VARCHAR(256) NOT NULL,
+seller_name            VARCHAR(100) NOT NULL,
+seller_office_name     VARCHAR(100) DEFAULT NULL,
+seller_high_postalcode SMALLINT(3)  UNSIGNED ZEROFILL NOT NULL ,
+seller_low_postalcode  SMALLINT(4)  UNSIGNED ZEROFILL NOT NULL,
+seller_address_1       VARCHAR(12)  NOT NULL,
+seller_address_2       VARCHAR(100) NOT NULL,
+seller_address_3       VARCHAR(100) NOT NULL,
+seller_registration    DATETIME     NOT NULL,
+seller_removed         TINYINT(1)   DEFAULT'0' NOT NULL
+)DEFAULT CHARSET=utf8;
+
+CREATE TABLE k2g1_buyer(
+buyer_id              VARCHAR(12)  NOT NULL PRIMARY KEY,
+buyer_pw              VARCHAR(256) NOT NULL,
+buyer_name            VARCHAR(100) NOT NULL,
+buyer_high_postalcode SMALLINT(3)  UNSIGNED ZEROFILL NOT NULL,
+buyer_low_postalcode  SMALLINT(4)  UNSIGNED ZEROFILL NOT NULL,
+buyer_address_1       VARCHAR(12)  NOT NULL,
+buyer_address_2       VARCHAR(100) NOT NULL,
+buyer_address_3       VARCHAR(100) NOT NULL,
+buyer_registration    DATETIME     NOT NULL,
+buyer_removed         TINYINT(1)   DEFAULT'0' NOT NULL
+)DEFAULT CHARSET=utf8;
+
+CREATE TABLE k2g1_review(
+review_order_id INT(11)    NOT NULL PRIMARY KEY,
+review_time     DATETIME   NOT NULL,
+review_good     TINYINT(1) NOT NULL,
+review_bad      TINYINT(1) NOT NULL,
+review_coment   TEXT       NOT NULL
+)DEFAULT CHARSET=utf8;
+
+CREATE TABLE k2g1_mail(
+mail_hash       VARCHAR(256) NOT NULL PRIMARY KEY,
+mail_pin_code   VARCHAR(4),
+mail_limit_time DATETIME     NOT NULL
+)DEFAULT CHARSET=utf8;
+
+CREATE TABLE k2g1_genre(
+genre_id   TINYINT(2)  NOT NULL PRIMARY KEY,
+genre_name VARCHAR(30) NOT NULL
+)DEFAULT CHARSET=utf8;
+
+CREATE TABLE k2g1_condition(
+condition_id   TINYINT(1)  NOT NULL PRIMARY KEY,
+condition_rank VARCHAR(30) NOT NULL
+)DEFAULT CHARSET=utf8;
+
+CREATE TABLE k2g1_item(
+item_id           INT(11)      NOT NULL PRIMARY KEY AUTO_INCREMENT,
+item_name         VARCHAR(100) NOT NULL,
+item_seller_id    VARCHAR(12)  NOT NULL,
+item_price        MEDIUMINT(7) UNSIGNED NOT NULL,
+item_quantity     MEDIUMINT(3) UNSIGNED NOT NULL,
+item_condition_id TINYINT(1)   NOT NULL,
+item_genre_id     TINYINT(2)   NOT NULL,
+item_description  TEXT         NOT NULL,
+item_image_path   VARCHAR(300) NOT NULL,
+item_time         DATETIME     NOT NULL,
+item_deleted      TINYINT(1)   DEFAULT'0' NOT NULL,
+CONSTRAINT FOR_item_seller_id
+FOREIGN KEY(item_seller_id) REFERENCES k2g1_seller(seller_id),
+CONSTRAINT FOR_item_genre_condition
+FOREIGN KEY(item_condition_id) REFERENCES k2g1_condition(condition_id),
+CONSTRAINT FOR_item_genre_id
+FOREIGN KEY(item_genre_id) REFERENCES k2g1_genre(genre_id)
+)DEFAULT CHARSET=utf8;
+
+CREATE TABLE k2g1_order(
+order_id              INT(11)      NOT NULL PRIMARY KEY AUTO_INCREMENT,
+order_time            DATETIME     NOT NULL,
+order_evaluated       TINYINT(1)   DEFAULT'0' NOT NULL,
+order_quantity        MEDIUMINT(3) NOT NULL,
+order_item_id         INT(11)      NOT NULL,
+order_user_id         VARCHAR(12)  NOT NULL,
+order_shipped         TINYINT(1)   DEFAULT'0' NOT NULL,
+order_high_postalcode SMALLINT(3)  UNSIGNED ZEROFILL NOT NULL,
+order_low_postalcode  SMALLINT(4)  UNSIGNED ZEROFILL NOT NULL,
+order_address_1       VARCHAR(12)  NOT NULL,
+order_address_2       VARCHAR(100) NOT NULL,
+order_address_3       VARCHAR(100) NOT NULL,
+CONSTRAINT FOR_order_item_id
+FOREIGN KEY(order_item_id) REFERENCES k2g1_item(item_id)
+)DEFAULT CHARSET=utf8;
+
+/* ---------- ダミーの出品者ID ---------------------------------------- */
+
+INSERT INTO k2g1_seller VALUES(
+'minami','$2y$10$pPsTjUnXRhxocantwPM2WeSHra.rVeYsmgNTOy4gZ9sPy.ptbzC06',
+'みなみ太郎','南大阪高等職業技術専門校',
+'594','1144','大阪府','和泉市テクノステージ','2-3-5',
+now(),'0'
+);
+
+INSERT INTO k2g1_seller VALUES(
+'minami2','$2y$10$pPsTjUnXRhxocantwPM2WeSHra.rVeYsmgNTOy4gZ9sPy.ptbzC06',
+'みなみ太郎２','みなみ太郎２のオフィスネーム',
+'594','1144','大阪府','和泉市テクノステージ','2-3-5',
+now(),'0'
+);
+
+INSERT INTO k2g1_seller
+(seller_id,seller_pw,seller_name,seller_high_postalcode,seller_low_postalcode,
+seller_address_1,seller_address_2,seller_address_3,
+seller_registration,seller_removed)
+VALUES
+('minami3','$2y$10$pPsTjUnXRhxocantwPM2WeSHra.rVeYsmgNTOy4gZ9sPy.ptbzC06',
+'みなみ太郎３（NULL）','594','1144',
+'大阪府','和泉市テクノステージ','2-3-5',
+now(),'0');
+
+INSERT INTO k2g1_seller VALUES(
+'minami4','$2y$10$pPsTjUnXRhxocantwPM2WeSHra.rVeYsmgNTOy4gZ9sPy.ptbzC06',
+'みなみ太郎４（個人空白）','',
+'594','1144','大阪府','和泉市テクノステージ','2-3-5',
+now(),'0'
+);
+
+/* ---------- 個々人の出品者ID ---------------------------------------- */
+
+INSERT INTO k2g1_seller VALUES(
+'akaike','$2y$10$QNeWBKW37nh/AnwKElsC7.69EbrzZDyL.BEHoRwcx9SUYUnxSQRqy',
+'赤池（出品者ver）','',
+'594','1144','大阪府','和泉市テクノステージ','2-3-5',
+now(),'0'
+);
+
+INSERT INTO k2g1_seller VALUES(
+'akino','$2y$10$4rMYCDBLu4kozKA1J3f.EedWffGe3WsZkeliuUo01rkJdvcQ1DN/W',
+'秋野浩朗（出品者ver）','',
+'536','0008','大阪府','大阪市城東区関目','秘密',
+now(),'0'
+);
+
+INSERT INTO k2g1_seller VALUES(
+'okuno','$2y$10$G85Wj11/QXDB8OT.HO6pFeAFT6fmKeZLHzicAUPOfkM3/OkWKTT9O',
+'奥野（出品者ver）','',
+'594','1144','大阪府','和泉市テクノステージ','2-3-5',
+now(),'0'
+);
+
+INSERT INTO k2g1_seller VALUES(
+'nishihara','$2y$10$fe03qb/lcRbmpN7tXIadoOF0uThCavboo4Lm88xzl1YQ31xb0H7Bi',
+'西原（出品者ver）','',
+'594','1144','大阪府','和泉市テクノステージ','2-3-5',
+now(),'0'
+);
+
+INSERT INTO k2g1_seller VALUES(
+'hoshino','$2y$10$hpAE0PZzNPHGQxIW115mies83SxwQpK2Zb3uj4tTRFh8Mw/rW/JfC',
+'星野（出品者ver）','',
+'594','1144','大阪府','和泉市テクノステージ','2-3-5',
+now(),'0'
+);
+
+INSERT INTO k2g1_seller VALUES(
+'yamamoto','$2y$10$7C7W.d/j2cnt8GzggtW5Jen.BwiLhuk/in3D.yEGivnCFZPLyOxaW',
+'山本（出品者ver）','',
+'594','1144','大阪府','和泉市テクノステージ','2-3-5',
+now(),'0'
+);
+
+/* ---------- 個々人の購入者ID ---------------------------------------- */
+
+INSERT INTO k2g1_buyer VALUES(
+'akaike2','$2y$10$QNeWBKW37nh/AnwKElsC7.69EbrzZDyL.BEHoRwcx9SUYUnxSQRqy',
+'あかいけ（購入者ver）',
+'540','0021','大阪府','大阪市中央区大手通','1-1-1',
+now(),'0'
+);
+
+INSERT INTO k2g1_buyer VALUES(
+'akino2','$2y$10$4rMYCDBLu4kozKA1J3f.EedWffGe3WsZkeliuUo01rkJdvcQ1DN/W',
+'あきの（購入者ver）',
+'540','0021','大阪府','大阪市中央区大手通','1-1-1',
+now(),'0'
+);
+
+INSERT INTO k2g1_buyer VALUES(
+'okuno2','$2y$10$G85Wj11/QXDB8OT.HO6pFeAFT6fmKeZLHzicAUPOfkM3/OkWKTT9O',
+'おくの（購入者ver）',
+'540','0021','大阪府','大阪市中央区大手通','1-1-1',
+now(),'0'
+);
+
+INSERT INTO k2g1_buyer VALUES(
+'nishihara2','$2y$10$fe03qb/lcRbmpN7tXIadoOF0uThCavboo4Lm88xzl1YQ31xb0H7Bi',
+'にしはら（購入者ver）',
+'540','0021','大阪府','大阪市中央区大手通','1-1-1',
+now(),'0'
+);
+
+INSERT INTO k2g1_buyer VALUES(
+'hoshino2','$2y$10$hpAE0PZzNPHGQxIW115mies83SxwQpK2Zb3uj4tTRFh8Mw/rW/JfC',
+'ほしの（購入者ver）',
+'540','0021','大阪府','大阪市中央区大手通','1-1-1',
+now(),'0'
+);
+
+INSERT INTO k2g1_buyer VALUES(
+'yamamoto2','$2y$10$7C7W.d/j2cnt8GzggtW5Jen.BwiLhuk/in3D.yEGivnCFZPLyOxaW',
+'やまもと（購入者ver）',
+'540','0021','大阪府','大阪市中央区大手通','1-1-1',
+now(),'0'
+);
+
+/* ---------- ジャンルと状態の初期情報設定 ---------------------------------------- */
+
+INSERT INTO k2g1_genre(genre_id,genre_name)
+VALUES(0,'全て'),(1,'パソコン'),(2,'PCパーツ'),(3,'スマホ'),(4,'カメラ'),
+(5,'デジタルオーディオプレーヤー'),(6,'オーディオ'),(7,'美容家電'),
+(8,'健康家電'),(9,'テレビ'),(10,'レコーダー'),(11,'電子辞書'),
+(12,'冷蔵庫'),(13,'洗濯機'),(14,'キッチン家電'),(15,'その他');
+
+INSERT INTO k2g1_condition(condition_id,condition_rank)
+VALUES(0,'未使用'),(1,'美品'),(2,'目立ったキズや汚れなし'),(3,'キズや汚れあり'),(4,'ジャンク');
+
+/* ---------- ダミーの商品情報 ---------------------------------------- */
+
+INSERT INTO k2g1_item VALUES(
+'1','a7(デジタル一眼レフカメラ)','minami','80000','10','2','4',
+'有効約2430万画素のフルサイズセンサーを小型・軽量ボディに搭載','../img/default.jpg',now(),'0'
+);
+INSERT INTO k2g1_item VALUES(
+'2','asusのスマホ(楽天モバイル)','minami','5000','1','4','3',
+'大容量バッテリーのスマホ。ただしヒドイ画面割れあり。','../img/default.jpg',now() + interval 1 second,'0'
+);
+INSERT INTO k2g1_item VALUES(
+'3','バカチョンカメラ','minami','100','100','4','4',
+'フィルム式の昔のカメラ。動作保証なし。','../img/default.jpg',now() + interval 2 second,'0'
+);
+INSERT INTO k2g1_item VALUES(
+'4','おんぼろPC','minami2','100','100','3','1',
+'型落ちPC。動作保証なし。','../img/default.jpg',now() + interval 3 second,'0'
+);
+INSERT INTO k2g1_item VALUES(
+'5','カメラ（南）','minami3','100','100','3','4',
+'個人のカメラ','../img/cherry.png',now() + interval 4 second,'0'
+);
+INSERT INTO k2g1_item VALUES(
+'6','思い出だらけのカメラ','minami4','10000','1','3','4',
+'個人のカメラ','../img/heart_tree.png',now() + interval 5 second,'0'
+);
+
+/* ---------- ダミーの購入履歴 ---------------------------------------- */
+
+INSERT INTO k2g1_order VALUES(
+'1',now(),'1','1','1','akaike','0',
+'540','0021','大阪府','大阪市中央区大手通','1-1-1'
+);
+INSERT INTO k2g1_order VALUES(
+'2',now(),'1','1','2','akaike','0',
+'540','0021','大阪府','大阪市中央区大手通','1-1-1'
+);
+INSERT INTO k2g1_order VALUES(
+'3',now(),'0','1','4','akaike','0',
+'540','0021','大阪府','大阪市中央区大手通','1-1-1'
+);
+
+
+/* ---------- ダミーの評価データ ---------------------------------------- */
+
+INSERT INTO k2g1_review VALUES(
+'1',now(),'0','1','なし');
+INSERT INTO k2g1_review VALUES(
+'2',now(),'1','0','なし');
+
+/* ---------- 各種確認用SQL文 ---------------------------------------- */
+
+select item_id,item_name,item_seller_id,seller_name,seller_office_name,format(item_price,0) as 'item_price',item_quantity,
+  (select ( sum(review_good) / (sum(review_good) + sum(review_bad)) ) 
+   from k2g1_item s_item left join k2g1_order on item_id = order_item_id left join k2g1_review k2g1_review on order_id = review_order_id 
+   where m_item.item_seller_id = s_item.item_seller_id 
+   group by s_item.item_seller_id 
+  ) as 'evaluation' 
+from k2g1_item m_item 
+left join k2g1_seller on item_seller_id = seller_id 
+left join k2g1_genre on item_genre_id = genre_id 
+left join k2g1_order on item_id = order_item_id 
+where item_quantity != 0 and item_deleted = 0
+and (item_name like '%みなみ%' or 
+  ( case when seller_office_name is NULL 
+    then seller_name like '%みなみ%'
+      else seller_office_name like '%みなみ%'
+    end
+  )
+)
+order by cast(item_price as signed) asc , item_time desc;
+
+select seller_office_name,seller_name 
+from k2g1_seller 
+where case when 
+  seller_office_name = '' or seller_office_name is NULL 
+    then seller_name like '%みなみ%'
+    else seller_office_name like '%みなみ%'
+  end
+;
+
+select seller_name,seller_office_name,seller_office_name is null from k2g1_seller;

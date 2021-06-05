@@ -1,0 +1,97 @@
+<!--
+
+【基本情報】
+作成者：秋野浩朗（web1902)
+概要　：XMLサイトマップ
+更新日：2020/2/10
+備考　：まあ、たかだか学校の課題でやる必要ないんやけどさ。
+
+-->
+
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+<!-- 最優先（指定しても意味ないけど） -->
+<url>
+	<loc>http://websystem.rulez.jp/19/web19g1/src/index.php</loc>
+	<priority>1.0</priority>
+	<changefreq>weekly</changefreq>
+	<lastmod>2020-02-10</lastmod>
+</url>
+
+<!-- 第二優先（指定しても意味ないけど） -->
+<url>
+	<loc>http://websystem.rulez.jp/19/web19g1/src/index_add.php</loc>
+	<priority>0.8</priority>
+	<changefreq>weekly</changefreq>
+	<lastmod>2020-02-10</lastmod>
+</url>
+<url>
+	<loc>http://websystem.rulez.jp/19/web19g1/src/item.php</loc>
+	<priority>0.8</priority>
+	<lastmod>2020-02-10</lastmod>
+</url>
+<url>
+	<loc>http://websystem.rulez.jp/19/web19g1/src/seller.php</loc>
+	<priority>0.8</priority>
+	<lastmod>2020-02-10</lastmod>
+</url>
+<url>
+	<loc>http://websystem.rulez.jp/19/web19g1/src/login.php</loc>
+	<priority>0.8</priority>
+	<lastmod>2020-02-10</lastmod>
+</url>
+
+<!-- 第三優先（指定しても意味ないけど） -->
+<url>
+	<loc>http://websystem.rulez.jp/19/web19g1/src/buy.conform.php</loc>
+	<priority>0.5</priority>
+	<lastmod>2020-02-10</lastmod>
+</url>
+<url>
+	<loc>http://websystem.rulez.jp/19/web19g1/src/buyer_mypage.php</loc>
+	<priority>0.5</priority>
+	<lastmod>2020-02-10</lastmod>
+</url>
+<url>
+	<loc>http://websystem.rulez.jp/19/web19g1/src/evaluate_form.php</loc>
+	<priority>0.5</priority>
+	<lastmod>2020-02-10</lastmod>
+</url>
+<url>
+	<loc>http://websystem.rulez.jp/19/web19g1/src/index_ajax.php</loc>
+	<priority>0.5</priority>
+	<lastmod>2020-02-10</lastmod>
+</url>
+<url>
+	<loc>http://websystem.rulez.jp/19/web19g1/src/login.php</loc>
+	<priority>0.5</priority>
+	<lastmod>2020-02-10</lastmod>
+</url>
+<url>
+	<loc>http://websystem.rulez.jp/19/web19g1/src/mail_sent.php</loc>
+	<priority>0.5</priority>
+	<lastmod>2020-02-10</lastmod>
+</url>
+<url>
+	<loc>http://websystem.rulez.jp/19/web19g1/src/reg_confirm.php</loc>
+	<priority>0.5</priority>
+	<lastmod>2020-02-10</lastmod>
+</url>
+<url>
+	<loc>http://websystem.rulez.jp/19/web19g1/src/register.check.php</loc>
+	<priority>0.5</priority>
+	<lastmod>2020-02-10</lastmod>
+</url>
+<url>
+	<loc>http://websystem.rulez.jp/19/web19g1/src/register.php</loc>
+	<priority>0.5</priority>
+	<lastmod>2020-02-10</lastmod>
+</url>
+<url>
+	<loc>http://websystem.rulez.jp/19/web19g1/src/seller_mypage.php</loc>
+	<priority>0.5</priority>
+	<lastmod>2020-02-10</lastmod>
+</url>
+
+</urlset>
